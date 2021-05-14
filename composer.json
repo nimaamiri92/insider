@@ -1,0 +1,15 @@
+{
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        },
+        "files":[
+            "app/Helpers/functions.php"
+        ]
+    },
+    "name": "duck/nima",
+    "description": "",
+    "require": {
+        "predis/predis": "^1.1"
+    }
+}
