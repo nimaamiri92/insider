@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Actions\Teams\TeamBehavior;
+namespace App\Actions\Teams\Repositories\Repositories\TeamBehavior;
 
 
 use App\Contracts\Teams\TeamBehavior\StrengthRateInterface;

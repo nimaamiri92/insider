@@ -6,7 +6,7 @@ namespace App\Actions\Repositories;
 
 
 use App\Actions\Models\Team;
-use App\Actions\Teams\TeamStrategy;
+use App\Actions\Repositories\Teams\TeamStrategy;
 
 class TeamRepository extends BaseRepository
 {

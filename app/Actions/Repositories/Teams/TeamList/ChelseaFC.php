@@ -1,11 +1,11 @@
 <?php
 
 
-namespace App\Actions\Teams\TeamList;
+namespace App\Actions\Repositories\Teams\TeamList;
 
 
-use App\Actions\Teams\TeamStrategy;
-use App\Actions\Teams\TeamBehavior\StrengthRateEighty;
+use App\Actions\Repositories\Teams\TeamBehavior\StrengthRateEighty;
+use App\Actions\Repositories\Teams\TeamStrategy;
 use App\Contracts\Teams\TeamInterface;
 
 class ChelseaFC extends TeamStrategy implements TeamInterface

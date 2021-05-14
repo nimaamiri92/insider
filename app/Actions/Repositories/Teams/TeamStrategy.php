@@ -1,15 +1,15 @@
 <?php
 
 
-namespace App\Actions\Teams;
+namespace App\Actions\Repositories\Teams;
 
-use App\Actions\Teams\TeamList\Arsenal;
-use App\Actions\Teams\TeamList\BurnleyFC;
-use App\Actions\Teams\TeamList\ChelseaFC;
-use App\Actions\Teams\TeamList\Everton;
-use App\Actions\Teams\TeamList\ManCity;
-use App\Actions\Teams\TeamList\WestHam;
-use App\Actions\Teams\TeamList\WolverhamptonWanderersFC;
+use App\Actions\Repositories\Teams\TeamList\Arsenal;
+use App\Actions\Repositories\Teams\TeamList\BurnleyFC;
+use App\Actions\Repositories\Teams\TeamList\ChelseaFC;
+use App\Actions\Repositories\Teams\TeamList\Everton;
+use App\Actions\Repositories\Teams\TeamList\ManCity;
+use App\Actions\Repositories\Teams\TeamList\WestHam;
+use App\Actions\Repositories\Teams\TeamList\WolverhamptonWanderersFC;
 use App\Contracts\Teams\TeamBehavior\StrengthRateInterface;
 
 class TeamStrategy
