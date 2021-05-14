@@ -44,7 +44,7 @@ class Response
 
     public static function Path()
     {
-        return ROOT . '/app/templates/';
+        return ROOT . '/app/Templates/';
     }
 
     public static function Render($template, $data)

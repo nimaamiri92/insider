@@ -1,7 +1,7 @@
 <html>
 <head>
     <title><?php echo $title; ?></title>
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="app/Resources/css/main.css">
 </head>
 <body>
 <div class="main">

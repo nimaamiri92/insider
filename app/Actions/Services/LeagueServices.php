@@ -60,6 +60,10 @@ class LeagueServices extends BaseServices
 
     public function playAllMatches()
     {
+        if ($this->leagueRepository->policy->isInMiddleOfLeague()) {
+            return $this->leagueRepository->getLeagueCurrentState();
+        }
+
         $league = $this->leagueRepository->getLeagueCurrentState();
         foreach ($league->getGameWeeksTable() as $match){
             $league->updateCurrentWeek();
