@@ -25,6 +25,42 @@ docker-compose up -d
 After that you just simply need open [localhost:8081](http://localhost:8081) on your browser.
 
 
+# Project Logic:
+
+## How a league create?
+In our `LeagueServices` class we have `createNewLeague`, this method by using policies checks no existed league in progress
+if a league in progress we return all data of current league otherwise we start to build up a league:
+
+- First get random team form `team model` by using `TeamRepository`,each team has pre-assigned strengthness rate
+- Then attach all this random teams to current league and init all team details in league
+- Set current week as first week of league
+- Create league(explain it below) matches as `Home/Away` match, and assign all matches to league
+- Init prediction result
+- And finally save this data in `League` model
+
+## How create league matches? 
+For handle the league matches we use `createHomeAndAwayMatches` method in `LeagueService` class.
+
+This method is recursive method that calculate unique permutation of all teams and when
+the permutation calculation is finished,create another match for each calculated permutation as `Home/Away match`.
+
+After that the service layer has responsibility to save all matches league.
+
+
+## How simulate a match?
+In `SimulateGamePlay` class we have `play` method.
+This class get current week match as input, start calculating of `strength rate` of both teams,
+after considering each team strength rate get random match result base on teams strengthness.
+
+
+## How calculate prediction?
+When league start we call `setUpList` method from `PredictionService` class to build up a new empty prediction list.
+
+After each match we call `updateList` method from `PredictionService` class and send current league result and input to it,it calculates predication base on new result and return it.
+
+
+
+
 # Directory Structure
 
 - [Root Directory](#the-root-directory)
@@ -130,38 +166,3 @@ The `templates` directory contains all `Html` files.
 <a name="the-docker-directory"></a>
 ## The docker Directory
 The `docker` directory contains config that docker need to run project.
-
-
-
-# Project Logic:
-
-## How a league create?
-In our `LeagueServices` class we have `createNewLeague`, this method by using policies checks no existed league in progress
-if a league in progress we return all data of current league otherwise we start to build up a league:
-
-- First get random team form `team model` by using `TeamRepository`,each team has pre-assigned strengthness rate
-- Then attach all this random teams to current league and init all team details in league
-- Set current week as first week of league
-- Create league(explain it below) matches as `Home/Away` match, and assign all matches to league
-- Init prediction result
-- And finally save this data in `League` model
-
-## How create league matches? 
-For handle the league matches we use `createHomeAndAwayMatches` method in `LeagueService` class.
-
-This method is recursive method that calculate unique permutation of all teams and when
-the permutation calculation is finished,create another match for each calculated permutation as `Home/Away match`.
-
-After that the service layer has responsibility to save all matches league.
-
-
-## How simulate a match?
-In `SimulateGamePlay` class we have `play` method.
-This class get current week match as input, start calculating of `strength rate` of both teams,
-after considering each team strength rate get random match result base on teams strengthness.
-
-
-## How calculate prediction?
-When league start we call `setUpList` method from `PredictionService` class to build up a new empty prediction list.
-
-After each match we call `updateList` method from `PredictionService` class and send current league result and input to it,it calculates predication base on new result and return it.
