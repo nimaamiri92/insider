@@ -28,7 +28,7 @@ After that you just simply need open [localhost:8081](http://localhost:8081) on 
 # Project Logic:
 
 ## How a league create?
-In our `LeagueServices` class we have `createNewLeague`, this method by using policies checks no existed league in progress
+In our `LeagueServices` class we have `createNewLeague` method, this method by using policies checks no existed league in progress
 if a league in progress we return all data of current league otherwise we start to build up a league:
 
 - First get random team form `team model` by using `TeamRepository`,each team has pre-assigned strengthness rate
