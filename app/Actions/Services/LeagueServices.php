@@ -79,31 +79,19 @@ class LeagueServices extends BaseServices
     }
 
     //TODO::refactor this
-    private function createHomeAndAwayMatches($teams, &$matches = [], &$rawMatches = [], $perms = [])
+    private function createHomeAndAwayMatches($teams, &$matches = [], &$rawMatchesDetails = [], $matchesPermutation = [])
     {
-        $matches = [];
         if (empty($teams)) {
-            $rawMatches[] = $weekHomeMatchArr1 = array_slice($perms, 0, 2);
-            $rawMatches[] = $weekHomeMatchArr2 = array_slice($perms, 2, 2);
-            $rawMatches[] = array_reverse($weekHomeMatchArr1);
-            $rawMatches[] = array_reverse($weekHomeMatchArr2);
-
-
-            foreach ($rawMatches as $match) {
-                $matchName = $match[0]->getName() . ' VS ' . $match[1]->getName();
-
-                if (empty($match[$matchName])) {
-                    $matches[$matchName] = $match;
-                }
-            }
+            $rawMatchesDetails = $this->getMatchOfWeek($matchesPermutation, $rawMatchesDetails);
+            $matches = $this->prepareTeamsInMatch($rawMatchesDetails, $matches);
 
         } else {
             for ($i = count($teams) - 1; $i >= 0; --$i) {
-                $newitems = $teams;
-                $newperms = $perms;
-                list($foo) = array_splice($newitems, $i, 1);
-                array_unshift($newperms, $foo);
-                $this->createHomeAndAwayMatches($newitems, $matches, $rawMatches, $newperms);
+                $newItems = $teams;
+                $newPermutation = $matchesPermutation;
+                list($team) = array_splice($newItems, $i, 1);
+                array_unshift($newPermutation, $team);
+                $this->createHomeAndAwayMatches($newItems, $matches, $rawMatchesDetails, $newPermutation);
             }
         }
         return $matches;
@@ -140,6 +128,36 @@ class LeagueServices extends BaseServices
         return $gamesWeekTable;
     }
 
+    /**
+     * @param $perms
+     * @param $rawMatches
+     * @return mixed
+     */
+    private function getMatchOfWeek($perms, $rawMatches)
+    {
+        $rawMatches[] = $firstMatchOfWeek = array_slice($perms, 0, 2);
+        $rawMatches[] = $secondMatchOfWeek = array_slice($perms, 2, 2);
+        $rawMatches[] = array_reverse($firstMatchOfWeek);
+        $rawMatches[] = array_reverse($secondMatchOfWeek);
+        return $rawMatches;
+    }
+
+    /**
+     * @param       $rawMatches
+     * @param array $matches
+     * @return array
+     */
+    private function prepareTeamsInMatch($rawMatches, array $matches): array
+    {
+        foreach ($rawMatches as $match) {
+            $matchName = $match[0]->getName() . ' VS ' . $match[1]->getName();
+
+            if (empty($match[$matchName])) {
+                $matches[$matchName] = $match;
+            }
+        }
+        return $matches;
+    }
 
 
 }
