@@ -35,7 +35,7 @@ final class Application
                 'title' => 'Error!',
                 'error' => $exception->displayErrorMessage(),
             ];
-            $content = Response::Render('layout/intr    o.php', $data);
+            $content = Response::Render('layout/intro.php', $data);
             $this->response()->setContent($content);
 
         }
