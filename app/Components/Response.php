@@ -55,11 +55,6 @@ class Response
         return ob_get_clean();
     }
 
-    public static function renderContent()
-    {
-
-    }
-
     public function sendOutput()
     {
         if ($this->_headers) {
