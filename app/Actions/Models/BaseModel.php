@@ -15,7 +15,7 @@ class BaseModel implements ModelInterface
         if (empty($value)) {
             $value = $this;
         }
-        Application::getInstance()->session()->set($key, $value);
+        DB::getInstance()->set($key, $value);
         return $value;
     }
 

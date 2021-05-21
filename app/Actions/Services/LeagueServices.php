@@ -12,6 +12,8 @@ use App\Actions\Repositories\TeamRepository;
 
 class LeagueServices extends BaseServices
 {
+    const FIRST_WEEK = 0;
+
     protected $leagueRepository;
 
     protected $teamRepository;
@@ -35,7 +37,7 @@ class LeagueServices extends BaseServices
         $randTeams = $this->teamRepository->selectRandomTeam();
         $this->model->setLeagueTeams($randTeams);
         $this->initTeamsPoints();
-        $this->model->setCurrentWeek(0);//TODO::convert to const
+        $this->model->setCurrentWeek(self::FIRST_WEEK);
         $allGames = $this->createHomeAndAwayMatches($this->model->getLeagueTeams());
         $this->model->setGames($allGames);
         $gamesWeekTable = $this->setEachWeekGame();
@@ -49,7 +51,7 @@ class LeagueServices extends BaseServices
     {
         $league = $this->leagueRepository->getLeagueCurrentState();
         $nextWeekMatches = $this->leagueRepository->getNextWeekMatch();
-        if (!$nextWeekMatches){
+        if (!$nextWeekMatches) {
             return false;
         }
         (new SimulateGamePlay($nextWeekMatches))->play()->getResult();
@@ -65,7 +67,7 @@ class LeagueServices extends BaseServices
         }
 
         $league = $this->leagueRepository->getLeagueCurrentState();
-        foreach ($league->getGameWeeksTable() as $match){
+        foreach ($league->getGameWeeksTable() as $match) {
             $league->updateCurrentWeek();
             (new SimulateGamePlay($match))->play()->getResult();
         }
@@ -78,20 +80,21 @@ class LeagueServices extends BaseServices
         $this->model->refresh();
     }
 
-    //TODO::refactor this
-    private function createHomeAndAwayMatches($teams, &$matches = [], &$rawMatchesDetails = [], $matchesPermutation = [])
+
+    private function createHomeAndAwayMatches($teams, &$matches = [], &$rawMatchesDetails = [],
+                                              $matchesPermutation = [])
     {
         if (empty($teams)) {
-            $rawMatchesDetails = $this->getMatchOfWeek($matchesPermutation, $rawMatchesDetails);
-            $matches = $this->prepareTeamsInMatch($rawMatchesDetails, $matches);
+            $rawMatchesDetails = $this->getMatch($matchesPermutation, $rawMatchesDetails);
+            $matches = $this->addMatchAndPreventDuplicatedMatch($rawMatchesDetails, $matches);
 
         } else {
             for ($i = count($teams) - 1; $i >= 0; --$i) {
-                $newItems = $teams;
+                $newTeams = $teams;
                 $newPermutation = $matchesPermutation;
-                list($team) = array_splice($newItems, $i, 1);
+                list($team) = array_splice($newTeams, $i, 1);
                 array_unshift($newPermutation, $team);
-                $this->createHomeAndAwayMatches($newItems, $matches, $rawMatchesDetails, $newPermutation);
+                $this->createHomeAndAwayMatches($newTeams, $matches, $rawMatchesDetails, $newPermutation);
             }
         }
         return $matches;
@@ -133,7 +136,7 @@ class LeagueServices extends BaseServices
      * @param $rawMatches
      * @return mixed
      */
-    private function getMatchOfWeek($perms, $rawMatches)
+    private function getMatch($perms, $rawMatches)
     {
         $rawMatches[] = $firstMatchOfWeek = array_slice($perms, 0, 2);
         $rawMatches[] = $secondMatchOfWeek = array_slice($perms, 2, 2);
@@ -147,7 +150,7 @@ class LeagueServices extends BaseServices
      * @param array $matches
      * @return array
      */
-    private function prepareTeamsInMatch($rawMatches, array $matches): array
+    private function addMatchAndPreventDuplicatedMatch($rawMatches, array $matches): array
     {
         foreach ($rawMatches as $match) {
             $matchName = $match[0]->getName() . ' VS ' . $match[1]->getName();
