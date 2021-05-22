@@ -10,9 +10,10 @@ class SimulateGamePlay
 {
     private $weekMatch;
 
-    public function __construct(array $weekMatches)
+    public function setMatch(array $weekMatches)
     {
         $this->weekMatch = $weekMatches;
+        return $this;
     }
 
     public function play()

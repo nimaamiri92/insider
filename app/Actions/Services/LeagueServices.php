@@ -20,12 +20,15 @@ class LeagueServices extends BaseServices
 
     protected $predictionService;
 
+    private $simulateMatch;
+
     public function __construct()
     {
         parent::__construct(new League);
         $this->teamRepository = new TeamRepository;
         $this->leagueRepository = new LeagueRepository;
         $this->predictionService = new PredictionService;
+        $this->simulateMatch = new SimulateGamePlay;
     }
 
     public function createNewLeague()
@@ -42,8 +45,7 @@ class LeagueServices extends BaseServices
         $this->model->setGames($allGames);
         $gamesWeekTable = $this->setEachWeekGame();
         $this->model->setGameWeeksTable($gamesWeekTable);
-        $predictionList = $this->predictionService->setUpList($randTeams);
-        $this->model->setPrediction($predictionList);
+        $this->model->setPrediction($this->predictionService->setUpList($randTeams));
         return $this->model->save($this->model->getTableName(), $this->model);
     }
 
@@ -54,7 +56,7 @@ class LeagueServices extends BaseServices
         if (!$nextWeekMatches) {
             return false;
         }
-        (new SimulateGamePlay($nextWeekMatches))->play()->getResult();
+        $this->simulateMatch->setMatch($nextWeekMatches)->play()->getResult();
         $league->updateCurrentWeek();
         $predictionList = $this->predictionService->updateList($league);
         $league->setPrediction($predictionList);
@@ -69,7 +71,7 @@ class LeagueServices extends BaseServices
         $league = $this->leagueRepository->getLeagueCurrentState();
         foreach ($league->getGameWeeksTable() as $match) {
             $league->updateCurrentWeek();
-            (new SimulateGamePlay($match))->play()->getResult();
+            $this->simulateMatch->setMatch($match)->play()->getResult();
         }
         $predictionList = $this->predictionService->updateList($league);
         $league->setPrediction($predictionList);
@@ -152,6 +154,7 @@ class LeagueServices extends BaseServices
     private function addMatchAndPreventDuplicatedMatch($rawMatches, array $matches): array
     {
         foreach ($rawMatches as $match) {
+            //create associative match name array
             $matchName = $match[0]->getName() . ' VS ' . $match[1]->getName();
 
             if (empty($match[$matchName])) {
