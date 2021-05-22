@@ -106,7 +106,6 @@ class LeagueServices extends BaseServices
         foreach ($teams as &$eachTeam) {
             $eachTeam->points = new Point();
         }
-        $this->model->setLeagueTeams($teams);
     }
 
     private function setEachWeekGame()
