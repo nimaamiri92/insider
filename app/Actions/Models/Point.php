@@ -4,7 +4,7 @@
 namespace App\Actions\Models;
 
 
-class Team extends BaseModel
+class Point extends BaseModel
 {
     private $TotalGD = 0;
     private $pts = 0;
