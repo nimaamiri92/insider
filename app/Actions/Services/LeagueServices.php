@@ -6,7 +6,7 @@ namespace App\Actions\Services;
 
 use App\Actions\Models\League;
 use App\Actions\Models\Match;
-use App\Actions\Models\Team;
+use App\Actions\Models\Point;
 use App\Actions\Repositories\LeagueRepository;
 use App\Actions\Repositories\TeamRepository;
 
@@ -104,7 +104,7 @@ class LeagueServices extends BaseServices
     {
         $teams = $this->model->getLeagueTeams();
         foreach ($teams as &$eachTeam) {
-            $eachTeam->points = new Team();
+            $eachTeam->points = new Point();
         }
         $this->model->setLeagueTeams($teams);
     }

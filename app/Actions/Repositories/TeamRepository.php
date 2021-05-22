@@ -5,7 +5,7 @@ namespace App\Actions\Repositories;
 
 
 
-use App\Actions\Models\Team;
+use App\Actions\Models\Point;
 use App\Actions\Repositories\Teams\TeamStrategy;
 
 class TeamRepository extends BaseRepository
@@ -14,7 +14,7 @@ class TeamRepository extends BaseRepository
 
     public function __construct()
     {
-        parent::__construct(new Team);
+        parent::__construct(new Point);
     }
 
     public function getAllTeams()

@@ -17,10 +17,8 @@ class SimulateGamePlay
 
     public function play()
     {
-
         foreach ($this->weekMatch['matches'] as &$match) {
-
-            if (!$this->weekMatch['is_done']) {
+            if (!$match->isDone()) {
                 $teams = [
                     $match->getFirstTeamData(),
                     $match->getSecondTeamData()
